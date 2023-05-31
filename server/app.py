@@ -33,6 +33,7 @@ class Campers(Resource):
     def post(self):
         try:
             data = request.get_json()
+            
             new_camper = Camper(
                 name = data['name'],
                 age = data['age']
@@ -42,6 +43,7 @@ class Campers(Resource):
             db.session.commit()
 
             return new_camper.to_dict(), 201
+        
         except:
             return {"error": "400: Validation error"}, 400
     
@@ -57,6 +59,7 @@ class CampersById(Resource):
                 camper.activities.append(s.activity)
             
             return camper.to_dict(only=("id", "name", "age", "activities")), 200
+        
         except:
             return {"error": "404: Camper not found"}, 404
     
@@ -79,11 +82,11 @@ class ActivitiesById(Resource):
 
             for a in act_signups:
                 db.session.delete(a)
-                
+
             db.session.delete(activity)
             db.session.commit()
 
-            return {"message": "202: delete Successful"}, 204
+            return {"message": "204: delete Successful"}, 204
         except:
             return {"error": "404: Activity not found"}, 404
         

@@ -28,6 +28,9 @@ class Activity(db.Model, SerializerMixin):
 
     signups = db.relationship("Signup", backref="activity")
 
+    # deletes signups using "cascade" instead
+    # signups = db.relationship("Signup", cascade="all,delete", backref="activity")
+
     serialize_rules = ("-signups.activity",)
     serialize_only = ("id", "name", "difficulty")
 
@@ -46,8 +49,11 @@ class Camper(db.Model, SerializerMixin):
 
     signups = db.relationship("Signup", backref="camper")
 
+    # will grab ONLY activity from signups and assign it to an "activities" property
+    # activities = association_proxy("signups", "activity")
+
     serialize_rules = ("-signups.camper",)
-    # serialize_only = ("id", "name", "age")
+    serialize_only = ("id", "name", "age")
 
     @validates('name')
     def validates_name(self, key, name):
